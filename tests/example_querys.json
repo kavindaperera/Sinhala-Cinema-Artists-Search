@@ -1,0 +1,10 @@
+[
+	{
+		"query": {
+			"multi_match": {
+				"query": "හොඳම නිළිය",
+				"fields": ["national_awards_si.award_name_si"]
+			}
+		}
+	}
+]

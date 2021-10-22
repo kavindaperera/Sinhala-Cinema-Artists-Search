@@ -1,5 +1,13 @@
-# Sinhala-Cinema-Artists-Search
-Sinhala Cinema Actors and Actresses Search Engine created using Elasticsearch and Web Scraping
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <h3 align="center">Sinhala-Cinema-Artists-Search</h3>
+  <p align="center">
+    Sinhala Cinema Actors and Actresses Search Engine created using Elasticsearch and Web Scraping!
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+  </p>
+</div>
 
 <!-- TABLE OF CONTENTS -->
 <details>

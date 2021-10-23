@@ -5,7 +5,7 @@
   <p align="center">
     Sinhala Cinema Actors and Actresses Search Engine created using Elasticsearch and Web Scraping!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://github.com/">View Demo</a>
   </p>
 </div>
 
@@ -57,23 +57,34 @@ The artist corpus contains data about more than 350 well-known actors and actres
 
 ## Getting Started
 
+```
+$ python3 -m venv venv
+$ venv\Scripts\activate
+$ pip install -r requirements.txt
 
+cd elasticsearch
+python json_bulk_upload.py
+
+cd flask-server
+npm install
+python app.py
+
+```
 
 ## Repository Structure
 
     ├── artists-corpus : data scraped from (http://films.lk/)                    
         ├── artists_data.json : raw artist data
         ├── artists_link.csv : links to the artists single pages 
-        └── trans_artists_data.json : translated artists data
+        └── clean_artists_data.json : translated artists data
     ├── elasticsearch : 
-        ├── json_bulk_upload.py :
-        └── requirements.txt :
+        └── json_bulk_upload.py :
     ├── examples : example queries     
     ├── flask-server : flask web app
-        ├── static : Frontend
-        ├── templates : Frontend
-        ├── index.py : Backend 
-        └── requirements.txt :
+        ├── static : frontend related files
+        ├── templates : frontend related files
+        └── index.py : backend related files 
+    ├── requirements.txt : virtual environment requirements   
     ├── scraper.ipynb : jupyter notebook for web scaper 
     ├── translator.ipynb : jupyter notebook for translation and transliteration
        

@@ -6,5 +6,15 @@
 				"fields": ["national_awards_si.award_name_si"]
 			}
 		}
+	},
+
+	{
+		"query": {
+			"wildcard": {
+				"known_as_si.keyword": {
+					"value": "දේවි*"
+				}
+			}
+		}
 	}
 ]

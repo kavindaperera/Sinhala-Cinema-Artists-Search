@@ -3,40 +3,150 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beans Love Beers</title>
+  <title>{{ title }}</title>
   <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@300&display=swap');
+    body { font-family: 'Noto Serif Sinhala', serif; }
+  </style>
+
 </head>
 
 <body>
-  <div class="bg-red-300 px-3 py-1">
-    <h2 class="text-3xl font-light text-white m-0">Sri Lankan Cinema Artists</h2>
-  </div>
+  <!-- Navbar goes here -->
+	<nav class="bg-white shadow-lg">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="flex justify-between">
+				<div class="flex space-x-7">
+					<!-- Website Logo -->
+					<div>
+						<a href="#" class="flex items-center py-4 px-2">
+
+							<span class="font-semibold text-gray-500 text-lg"
+								>{{ title }}</span
+							>
+						</a>
+					</div>
+					<!-- Primary Navbar items -->
+					<div class="hidden md:flex items-center space-x-1">
+						<a
+							href="/"
+							class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold "
+							>මුල් පිටුව</a
+						>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+
+
   <!-- Search Bar -->
   <div class="container">
-  <form >
-    <input type="text" placeholder="Search for artists..."
-      class="border-2 ml-64 border-gray-700 w-2/5 mt-10 py-3 px-4"></input>
-    <button class="bg-blue-700 text-xl hover:bg-blue-500 text-white py-2 px-3">Search</button>
+
+  <form action="/" method="GET" >
+    <input id="source" name="artist_name" type="search" placeholder="කලාකරුවාගේ නමින් සොයන්න"
+      class="border-2 ml-64 border-gray-700 w-2/5 mt-10 py-3 px-4" value="{{ artist_name }}"> 
+    </input>
+    <button type="submit" class="bg-green-500 text-xl hover:bg-green-700 text-white py-2 px-3">සෙවීම</button>
+
   </form>
+
+  <form action="/search" method="GET" >
+    <input name="q" type="search" placeholder="සිංහල භාෂාවෙන් අතුලත් කරන්න..."
+      class="border-2 ml-64 border-gray-700 w-2/5 mt-10 py-3 px-4" value="{{ search }}"> 
+
+    </input>
+    <button type="submit" class="bg-blue-500 text-xl hover:bg-blue-700 text-white py-2 px-3">සෙවීම</button>
+
+  </form>
+
+
   </div>
+
 
   <!-- Selection -->
   <div class="container">
-    <div class="grid gap-8 grid-cols-3 mt-5 ">
+    <div class="grid gap-8 grid-cols-1 mt-5 ">
 
       {% for artist in data %}
 
-
-        <div class="w-3/5 mr-0">
-          <h2 class="text-gray-800 font-bold">{{ artist.known_as_si }}</h2>
-          <p>{{ artist.known_as_en }}</p>
+      <div class=" w-full lg:max-w-full lg:flex">
+        <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" >
         </div>
+        <div class="border-r border-b border-l border-gray-400 lg:border-l lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+          <div class="mb-8">
+            <div class="text-gray-900 font-bold text-xl mb-2">ප්‍රසිද්ධ නාමය : {{ artist.known_as_si }}</div>
+            <div class="text-gray-900 font-bold text-xl mb-2">ඇත්ත නම : {{ artist.real_name_si }}</div>
+
+            {% if artist.birth_si %}
+            <div class="text-gray-900 font-bold text-xl mb-2">උපන්දිනය : {{ artist.birth_si  }}</div>
+            {% endif %}
+
+            {% if artist.death_si %}
+            <div class="text-gray-900 font-bold text-xl mb-2">විපත : {{ artist.death_si }}</div>
+            {% endif %}
+
+          </div>
+
+        </div>
+      </div>
 
 
       {% endfor %}
 
     </div>
   </div>
+
+  <script>
+
+    const $source = document.querySelector('#source')
+
+    const typeHandler = function(e) {
+        $.ajax({
+            url: "/autocomplete",
+            type : 'POST',
+            cache: false,
+            data:{'data': e.target.value},
+            success: function(html)
+            {
+                var count = 0;
+                var suggest = [];
+
+                jQuery.each(html.hits.hits, function(index, value){
+
+                  suggest.push(value._source.known_as_si)
+                  
+                  });
+
+                $("#source").autocomplete({
+                  source: suggest
+                })
+
+                count = 0;
+            }
+        });
+    }
+
+    $source.addEventListener('input', typeHandler) // register for oninput
+    $source.addEventListener('propertychange', typeHandler) // for IE8
+
+  </script>
 
 </body>
 

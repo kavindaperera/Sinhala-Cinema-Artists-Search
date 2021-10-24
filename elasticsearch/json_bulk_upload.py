@@ -38,11 +38,11 @@ mapping = {
                     "type": "edge_ngram",
                     "min_gram": 2,
                     "max_gram": 20,
-                    "side":"front"
+                    "side": "front"
                 },
                 "sinhala_stop": {
-                    "type":"stop",
-                    "stopwords":[]
+                    "type": "stop",
+                    "stopwords": []
                 }
             }
         }
@@ -50,7 +50,7 @@ mapping = {
     "mappings": {
         "properties": {
             "biography_en": {
-                "type": "text"       
+                "type": "text"
             },
             "biography_si": {
                 "type": "text",
@@ -94,11 +94,23 @@ mapping = {
             },
             "known_as_en": {
                 "type": "text",
-                "analyzer": "english_ngram_analyzer"
+                "analyzer": "english_ngram_analyzer",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
             },
             "known_as_si": {
                 "type": "text",
-                "analyzer": "sinhala_ngram_analyzer"
+                "analyzer": "sinhala_ngram_analyzer",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
             },
             "national_awards_en": {
                 "properties": {
@@ -134,11 +146,23 @@ mapping = {
             },
             "real_name_en": {
                 "type": "text",
-                "analyzer": "english_ngram_analyzer"
+                "analyzer": "english_ngram_analyzer",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
             },
             "real_name_si": {
                 "type": "text",
-                "analyzer": "sinhala_ngram_analyzer"
+                "analyzer": "sinhala_ngram_analyzer",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
             }
         }
     }

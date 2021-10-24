@@ -37,7 +37,7 @@
 
 ### No of Records
 
-- The artist corpus contains data about more than 350 well-known actors and actresses. Data was be extracted from [website](films.lk)
+- The artist corpus contains data about more than 350 well-known actors and actresses. Data was be extracted from [films.lk](films.lk)
 
 ### Data Fields
 
@@ -52,6 +52,8 @@
 
 
 ## Advanced Features
+
+### Search Suggestions Using Wildcards
 
 
 

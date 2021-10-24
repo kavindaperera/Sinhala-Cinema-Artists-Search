@@ -24,7 +24,7 @@
         <li><a href="#data-scraping">Data Scraping</a></li>
       </ul>
     </li>
-    <li><a href="#techiques-used-in-designing-indexing-and-querying">Techniques Used in Designing Indexing and Querying</a></li>
+    <li><a href="#techniques-used-in-designing-indexing-and-querying">Techniques Used in Designing Indexing and Querying</a></li>
     <li><a href="#advanced-features">Advanced Features</a></li>
     <li><a href="#getting-started">Getting Started</a></li>
     <li><a href="#repository-structure">Repository Structure</a></li>
@@ -37,7 +37,7 @@
 
 ### No of Records
 
-The artist corpus contains data about more than 350 well-known actors and actresses. Data was be extracted from [website](films.lk)
+- The artist corpus contains data about more than 350 well-known actors and actresses. Data was be extracted from [website](films.lk)
 
 ### Data Fields
 
@@ -57,14 +57,20 @@ The artist corpus contains data about more than 350 well-known actors and actres
 
 ## Getting Started
 
+
+###  Setup virtual environement
 ```
 $ python3 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
-
+```
+### Elasticsearch
+```
 cd elasticsearch
 python json_bulk_upload.py
-
+```
+### Start flask-server
+```
 cd flask-server
 npm install
 python app.py

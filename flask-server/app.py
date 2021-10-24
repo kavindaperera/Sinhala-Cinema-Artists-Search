@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from elasticsearch import Elasticsearch, helpers, ElasticsearchException
 import requests
 
-es = Elasticsearch()
+es = Elasticsearch([{'host': 'localhost', 'port':9200}])
 
 app = Flask(__name__)
 
@@ -27,13 +27,7 @@ def home():
 
     return render_template("index.html", data=artist_list, es_error=es_error, title="Sinhala Artist Search")
 
-# @app.route("/search", methods=['GET', 'POST'])
-# def search_es():
 
-#     if request.method == 'POST':
-   
-
-#     return render_template("index.html", data=artist_list, es_error=es_error, title="Sinhala Artist Search")
 
 if __name__ == "__main__":
     app.run(debug=True)

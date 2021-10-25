@@ -15,14 +15,15 @@ app = Flask(__name__)
 
 tokenizer = SinhalaTokenizer()
 
-acted_identifiers = ["යේ", "රගපැ", "රගපාපු", "රඟපැ", "රඟපාපු"]
-role_identifers = ["නළුවන්", "නිළියන්"]
+acted_identifiers = ["රගපැ", "රගපාපු", "රඟපැ", "රඟපාපු"]
+role_identifers = ["නළුවන්", "නිළියන්", "කලාකරුවන්"]
+actor_identifers = ["නළුවන්", "නළුවා"]
+actress_identifers = ["නිළියන්", "නිළිය", "නිලිය"]
 film_identifiers = ["චිත්‍රපටයේ", "චිත්‍රපටය"]
-award_identifiers = ["සම්මානය"]
-award_ceremony_identifiers = ["සම්මාන", "උලෙල", "උළෙල"]
-
+award_identifiers = ["සම්මානය", "සම්මාන"]
+award_ceremony_identifiers = ["සම්මාන", "සම්මානය", "උලෙල", "උළෙල"]
+won_identifiers = ["දිනූ", "ජයග්‍රහනය", "ජයග්‍රහණය", "ජයග්‍රහණය කල"]
 stop_words = open("stop_words.txt", 'r', encoding="utf8").read().split('\n')
-
 
 class QueryProcessor:
 
@@ -30,27 +31,61 @@ class QueryProcessor:
     def processingQuery(self, query):
 
         tokens = tokenizer.tokenize(query)
-        search_fields, query = self.classifyIntent(tokens=tokens, query=query)
+        must_list, should_list = self.classifyIntent(
+            tokens=tokens, query=query)
 
-        return search_fields, query
+        return must_list, should_list
 
     @classmethod
     def classifyIntent(self, tokens, query):
 
-        search_fields = []
+        must_list = []
+        should_list = []
 
         for token in tokens:
+            if(len(token)>1):
+                splits = word_splitter.split(token)
 
-            splits = word_splitter.split(token)
+                if (splits['affix'] == "යේ") and (token not in film_identifiers):
+                    must_list.append({
+                        "match": {
+                            "filmography_si.film_name_si": token
+                        }
+                    })
 
-            if(token in acted_identifiers or splits['affix'] == "යේ"):
-                search_fields.append("filmography_si.film_name_si")
-                query = query.replace(token, "")
+            if(token in acted_identifiers) or (token in film_identifiers):
+                idx = tokens.index(token) - 1
+                if idx >= 0 and (token not in acted_identifiers):
+                    must_list.append({
+                        "match": {
+                            "filmography_si.film_name_si": ' '.join(tokens[:idx+1])
+                        }
+                    })
 
-            if(token in role_identifers):
-                query = query.replace(token, "")
+            if(token in won_identifiers) or (token in award_ceremony_identifiers):
+                idx = tokens.index(token) - 1
+                if idx >= 0 and (token not in won_identifiers):
+                    must_list.append({
+                        "match": {
+                            "national_awards_si.award_ceremony_name_si": ' '.join(tokens[:idx+1])
+                        }
+                    })
 
-        return search_fields, query.strip()
+            if(token in actor_identifers):
+                must_list.append({
+                    "match": {
+                        "filmography_si.role_name_si": "නළුවා"
+                    }
+                })
+
+            if(token in actress_identifers):
+                must_list.append({
+                    "match": {
+                        "filmography_si.role_name_si": "නිළිය"
+                    }
+                })
+
+        return must_list, should_list
 
 
 @app.route("/")
@@ -70,7 +105,7 @@ def home():
                                              "query": "{}".format(artist_name),
                                              "fields": ["real_name_si", "known_as_si"]
                                          }
-                                     }, size=10)
+                                     }, size=100)
 
         except ElasticsearchException as e:
             es_error = e
@@ -80,15 +115,17 @@ def home():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", q="", search=artist_name,  artist_name=artist_name, about_artist=(artist_list[0] if len(artist_list)>0 else ""), data=artist_list, es_error=es_error, title=TITLE)
+        return render_template("index.html", q="", search=artist_name,  artist_name=artist_name, about_artist=(artist_list[0] if len(artist_list) > 0 else ""), data=artist_list, es_error=es_error, title=TITLE)
 
     else:
 
         try:
             artists_data = es.search(index=NODE_NAME,
-                                     query={
-                                         "match_all": {}
-                                     }, size=10)
+                                     body={"size": 500,
+                                           "query": {
+                                               "match_all": {}}
+                                           }
+                                     )
 
         except ElasticsearchException as e:
             es_error = e
@@ -107,39 +144,47 @@ def autocomplete():
     print("Suggest For:", data)
 
     res = es.search(index=NODE_NAME,
-                    query={
-                        "wildcard": {
-                            "known_as_si.keyword": {
-                                "value": "{}*".format(data)
+                    body={
+                        "size": 100,
+                        "query": {
+                            "wildcard": {
+                                "known_as_si.keyword": {
+                                    "value": "{}*".format(data)
+                                }
                             }
-                        }})
+                        }
+                    })
 
     return res
 
 
-@app.route('/search', methods=["GET", "POST"])
+@ app.route('/search', methods=["GET", "POST"])
 def search():
     q = request.args.get("q")
 
     preprocessor = QueryProcessor()
 
-    search_fields, query = preprocessor.processingQuery(query=q)
+    must_list, should_list = preprocessor.processingQuery(query=q)
 
     artists_data = ""
     es_error = ""
     artist_list = []
 
-    print("Search For:", query, " in ", search_fields)
+    print("must_list: ", must_list)
+    print("should_list: ", should_list)
 
-    if len(search_fields) > 0:
+    if len(must_list) > 0:
         try:
             artists_data = es.search(index=NODE_NAME,
-                                     query={
-                                         "multi_match": {
-                                             "query": "{}".format(query),
-                                             "fields": search_fields
+                                     body={
+                                         "size": 100,
+                                         "query": {
+                                             "bool": {
+                                                 "must": must_list,
+                                                 "should": should_list
+                                             }
                                          }
-                                     }, size=10)
+                                     })
 
         except ElasticsearchException as e:
             es_error = e
@@ -154,17 +199,21 @@ def search():
     else:
         try:
             artists_data = es.search(index=NODE_NAME,
-                                     query={
-                                         "multi_match": {
-                                             "query": "{}".format(query),
-                                             "fields": ["real_name_si", "known_as_si"
-                                                        "filmography_si.film_name_si",
-                                                        "biography_si",
-                                                        "national_awards_si.award_ceremony_name_si",
-                                                        "national_awards_si.award_name_si",
-                                                        "national_awards_si.film_name_si"]
+                                     body={
+                                         "size": 100,
+                                         "query": {
+                                             "multi_match": {
+                                                 "query": "{}".format(q),
+                                                 "fields": ["real_name_si", "known_as_si",
+                                                            "filmography_si.film_name_si",
+                                                            "biography_si",
+                                                            "national_awards_si.award_ceremony_name_si",
+                                                            "national_awards_si.award_name_si",
+                                                            "national_awards_si.film_name_si"],
+                                                 "zero_terms_query": "all"
+                                             }
                                          }
-                                     }, size=10)
+                                     })
 
         except ElasticsearchException as e:
             es_error = e

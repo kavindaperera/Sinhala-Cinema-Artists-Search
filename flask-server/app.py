@@ -17,7 +17,7 @@ tokenizer = SinhalaTokenizer()
 
 acted_identifiers = ["රගපැ", "රගපාපු", "රඟපැ", "රඟපාපු"]
 role_identifers = ["නළුවන්", "නිළියන්", "කලාකරුවන්"]
-actor_identifers = ["නළුවන්", "නළුවා"]
+actor_identifers = ["නළුවන්", "නළුවා","නළුව"]
 actress_identifers = ["නිළියන්", "නිළිය", "නිලිය"]
 film_identifiers = ["චිත්‍රපටයේ", "චිත්‍රපටය"]
 award_identifiers = ["සම්මානය", "සම්මාන"]

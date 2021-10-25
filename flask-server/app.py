@@ -7,6 +7,7 @@ import json
 from sinling import SinhalaTokenizer, word_splitter
 
 NODE_NAME = "index-artists"
+TITLE = "සිංහල කලාකරුවන්"
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
@@ -17,6 +18,10 @@ tokenizer = SinhalaTokenizer()
 acted_identifiers = ["යේ", "රගපැ", "රගපාපු", "රඟපැ", "රඟපාපු"]
 role_identifers = ["නළුවන්", "නිළියන්"]
 film_identifiers = ["චිත්‍රපටයේ", "චිත්‍රපටය"]
+award_identifiers = ["සම්මානය"]
+award_ceremony_identifiers = ["සම්මාන", "උලෙල", "උළෙල"]
+
+stop_words = open("stop_words.txt", 'r', encoding="utf8").read().split('\n')
 
 
 class QueryProcessor:
@@ -75,7 +80,7 @@ def home():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", q="", search=artist_name,  artist_name=artist_name, about_artist=artist_list[0], data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", q="", search=artist_name,  artist_name=artist_name, about_artist=(artist_list[0] if len(artist_list)>0 else ""), data=artist_list, es_error=es_error, title=TITLE)
 
     else:
 
@@ -93,7 +98,7 @@ def home():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html",q="", search="", artist_name="",about_artist=artist_list[0], data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", q="", search="", artist_name="", about_artist=(artist_list[0] if len(artist_list) > 0 else ""), data=artist_list, es_error=es_error, title=TITLE)
 
 
 @app.route('/autocomplete', methods=["GET", "POST"])
@@ -110,7 +115,6 @@ def autocomplete():
                         }})
 
     return res
-  
 
 
 @app.route('/search', methods=["GET", "POST"])
@@ -145,7 +149,7 @@ def search():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", q=q, search=q , artist_name="", about_artist=artist_list[0], data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", q=q, search=q, artist_name="", about_artist=(artist_list[0] if len(artist_list) > 0 else ""), data=artist_list, es_error=es_error, title=TITLE)
 
     else:
         try:
@@ -153,12 +157,12 @@ def search():
                                      query={
                                          "multi_match": {
                                              "query": "{}".format(query),
-                                             "fields": ["filmography_si.film_name_si",
+                                             "fields": ["real_name_si", "known_as_si"
+                                                        "filmography_si.film_name_si",
                                                         "biography_si",
                                                         "national_awards_si.award_ceremony_name_si",
                                                         "national_awards_si.award_name_si",
-                                                        "national_awards_si.film_name_si"],
-                                             "analyzer": "sinhala_analyzer_sw"
+                                                        "national_awards_si.film_name_si"]
                                          }
                                      }, size=10)
 
@@ -170,7 +174,7 @@ def search():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", search=q, artist_name="", about_artist=(artist_list[0] if len(artist_list)>0 else "") , data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", search=q, artist_name="", about_artist=(artist_list[0] if len(artist_list) > 0 else ""), data=artist_list, es_error=es_error, title=TITLE)
 
 
 if __name__ == "__main__":

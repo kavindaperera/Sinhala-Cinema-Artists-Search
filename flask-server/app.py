@@ -75,7 +75,7 @@ def home():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", search="", artist_name=artist_name, data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", q="", search=artist_name,  artist_name=artist_name, about_artist=artist_list[0], data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
 
     else:
 
@@ -93,7 +93,7 @@ def home():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", search="", data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html",q="", search="", artist_name="",about_artist=artist_list[0], data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
 
 
 @app.route('/autocomplete', methods=["GET", "POST"])
@@ -110,6 +110,7 @@ def autocomplete():
                         }})
 
     return res
+  
 
 
 @app.route('/search', methods=["GET", "POST"])
@@ -144,7 +145,7 @@ def search():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", search=q, artist_name="", data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", q=q, search=q , artist_name="", about_artist=artist_list[0], data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
 
     else:
         try:
@@ -169,7 +170,7 @@ def search():
             for artist in artists_data['hits']['hits']:
                 artist_list.append(artist['_source'])
 
-        return render_template("index.html", search=q, artist_name="", data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
+        return render_template("index.html", search=q, artist_name="", about_artist=(artist_list[0] if len(artist_list)>0 else "") , data=artist_list, es_error=es_error, title="සිංහල කලාකරුවන්")
 
 
 if __name__ == "__main__":

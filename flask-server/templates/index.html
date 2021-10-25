@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }}</title>
-  <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+  
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -18,100 +19,262 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@300&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400&display=swap');
     body { font-family: 'Noto Serif Sinhala', serif; }
   </style>
 
 </head>
 
 <body>
-  <!-- Navbar goes here -->
-	<nav class="bg-white shadow-lg">
-		<div class="max-w-6xl mx-auto px-4">
-			<div class="flex justify-between">
-				<div class="flex space-x-7">
-					<!-- Website Logo -->
-					<div>
-						<a href="#" class="flex items-center py-4 px-2">
+    <div class="container-fluid">
+        <div class="row">
+          <!-- BEGIN SEARCH RESULT -->
+          <div class="col-md-12">
+            <div class="grid search">
+              <div class="grid-body">
+                <div class="row">
+                  <!-- BEGIN FILTERS -->
+                  <div class="col-md-2">
+                    <h2 class="grid-title"><i class="fa fa-filter amber-text"></i> Filters</h2>
+                    <hr>
+                    
+                    <!-- BEGIN FILTER BY CATEGORY -->
+                    <!-- <h4>By category:</h4>
+                    <div class="checkbox">
+                      <label><input type="checkbox" class="icheck"> Application</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" class="icheck"> Design</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" class="icheck"> Desktop</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" class="icheck"> Management</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" class="icheck"> Mobile</label>
+                    </div> -->
+                    <!-- END FILTER BY CATEGORY -->
+                    
+                    <!-- <div class="padding"></div> -->
+                    
+                    <!-- BEGIN FILTER BY DATE -->
+                    <!-- <h4>By date:</h4>
+                    From
+                    <div class="input-group date form_date" data-date="2014-06-14T05:25:07Z" data-date-format="dd-mm-yyyy" data-link-field="dtp_input1">
+                      <input type="text" class="form-control">
+                      <span class="input-group-addon bg-blue"><i class="fa fa-th"></i></span>
+                    </div>
+                    <input type="hidden" id="dtp_input1" value="">
+                    
+                    To
+                    <div class="input-group date form_date" data-date="2014-06-14T05:25:07Z" data-date-format="dd-mm-yyyy" data-link-field="dtp_input2">
+                      <input type="text" class="form-control">
+                      <span class="input-group-addon bg-blue"><i class="fa fa-th"></i></span>
+                    </div>
+                    <input type="hidden" id="dtp_input2" value=""> -->
+                    <!-- END FILTER BY DATE -->
+                    
+                    <!-- <div class="padding"></div> -->
+                    
+                    <!-- BEGIN FILTER BY PRICE -->
+                    <!-- <h4>By price:</h4>
+                    Between <div id="price1">$300</div> to <div id="price2">$800</div>
+                    <div class="slider-primary">
+                      <div class="slider slider-horizontal" style="width: 152px;"><div class="slider-track"><div class="slider-selection" style="left: 30%; width: 50%;"></div><div class="slider-handle round" style="left: 30%;"></div><div class="slider-handle round" style="left: 80%;"></div></div><div class="tooltip top hide" style="top: -30px; left: 50.1px;"><div class="tooltip-arrow"></div><div class="tooltip-inner">300 : 800</div></div><input type="text" class="slider" value="" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="[300,800]" data-slider-tooltip="hide"></div>
+                    </div> -->
+                    <!-- END FILTER BY PRICE -->
+                  </div>
+                  <!-- END FILTERS -->
+                  <!-- BEGIN RESULT -->
+                  <div class="col-md-6">
+                    <h2  ><a href="/"><i  class="fa fa-home"></i></a>  {{ title }}</h2>
+                    <hr>
+                    <!-- BEGIN SEARCH INPUT -->
+                    <form action="/" method="GET" >
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">නම</span>
+                          </div>
+                            <input type="text" id="source" name="artist_name" class="form-control" value="{{ artist_name }}" placeholder="කලාකරුවාගේ නමින් සොයන්න...">
+                            <span class="input-group-btn ml-2">
+                                <button class="btn btn-success" type="submit">සොයන්න</button>
+                            </span>
+                        </div>          
+                    </form>
+                    <hr class="hr-text" data-content="හෝ">
+                    <form action="/search" method="GET" >
+                        <div class="input-group">
+                            <input type="text"  name="q" class="form-control" value="{{ q }}" placeholder="සිංහල භාෂාවෙන් සෙවීම...">
+                            <span class="input-group-btn ml-2">
+                                <button class="btn btn-info" type="submit">සොයන්න</button>
+                            </span>
+                        </div>
+                        
+                    </form>
+                    <!-- END SEARCH INPUT -->
+                    <br>
 
-							<span class="font-semibold text-gray-500 text-lg"
-								>{{ title }}</span
-							>
-						</a>
-					</div>
-					<!-- Primary Navbar items -->
-					<div class="hidden md:flex items-center space-x-1">
-						<a
-							href="/"
-							class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold "
-							>මුල් පිටුව</a
-						>
+                    {% if search %}
+                    <p> "{{ search }}" සඳහා සියලු ප්‍රතිඵල {{ data|length  }} යි</p>
+                    {% else %}
+                    <p> සියලුම ප්‍රතිඵල {{ data|length  }} යි </p>
+                    {% endif %}
+                    
+                    <div class="padding"></div>
+                    
+                    <!-- BEGIN TABLE RESULT -->
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <tbody>
+                        {% for artist in data %}    
+                            <tr>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ artist.known_as_si }}</h5>
+                                        <p class="card-text">ප්‍රසිද්ධ නාමය : {{ artist.known_as_si }}</p>
+                                        <p class="card-text">ඇත්ත නම : {{ artist.real_name_si }}</p>
+                                    
+                                        {% if artist.birth_si %}
+                                        <p class="card-text">උපන්දිනය : {{ artist.birth_si  }}</p>
+                                        {% endif %}
 
-					</div>
-				</div>
-			</div>
-		</div>
-	</nav>
+                                        {% if artist.death_si %}
+                                        <p class="card-text">විපත : {{ artist.death_si }}</p>
+                                        {% endif %}
+
+                                        <form action="/" method="GET" >
+                                          <input  type="hidden" name="artist_name" class="form-control" value="{{ artist.known_as_si }}" placeholder="සිංහල භාෂාවෙන් සෙවීම...">
+                                          <button type="submit" class="btn btn-info">වැඩි විස්තර</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </tr>
+                        {% endfor %}
+                      </tbody></table>
+                    </div>
+                    <!-- END TABLE RESULT -->
+                    
+                    <!-- BEGIN PAGINATION -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                      </nav>
+                    <!-- END PAGINATION -->
+                  </div>
+
+                  <div class="col-md-4">
+                    <h2 class="grid-title"><i class="fa fa-info"></i> වැඩි විස්තර</h2>
+                    <hr>
+
+                    {% if about_artist != "" %}
+                    <h5 class="card-title"> {{ about_artist.known_as_si }}</h5>
+                    {% endif %}
+
+                    <div id="accordion">
+                        <div class="card">
+                          <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                              <button class="btn " data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                තිරගත වූ චිත්‍රපට
+                              </button>
+                            </h5>
+                          </div>
+                      
+                          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                              
+                              <ul class="list-group">
+
+                                {% for film in about_artist.filmography_si %}  
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center">{{ film.film_name_si }}
+                                  <h6><span class="badge badge-info badge-pill">{{ film.role_name_si }}</span></h6>
+                                  
+                                </li>
+                                {% endfor %}
+                              </ul>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                              <button class="btn  collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                සම්මාන
+                              </button>
+                            </h5>
+                          </div>
+                          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+
+                              <div class="list-group">
+                                {% for award in about_artist.national_awards_si %}  
+
+                                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                  <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{award.award_ceremony_name_si}}</h5>
+                                  </div>
+                                  <p class="mb-1">{{award.award_name_si}}</p>
+
+                                  {% if award.film_name_si != "" %}
+                                  <small class="text-muted">සිනමාපටය: {{award.film_name_si}}</small>
+                                  {% endif %}
+                                  
 
 
+                                </a>
 
-  <!-- Search Bar -->
-  <div class="container">
+                                {% endfor %}
 
-  <form action="/" method="GET" >
-    <input id="source" name="artist_name" type="search" placeholder="කලාකරුවාගේ නමින් සොයන්න"
-      class="border-2 ml-64 border-gray-700 w-2/5 mt-10 py-3 px-4" value="{{ artist_name }}"> 
-    </input>
-    <button type="submit" class="bg-green-500 text-xl hover:bg-green-700 text-white py-2 px-3">සෙවීම</button>
-
-  </form>
-
-  <form action="/search" method="GET" >
-    <input name="q" type="search" placeholder="සිංහල භාෂාවෙන් අතුලත් කරන්න..."
-      class="border-2 ml-64 border-gray-700 w-2/5 mt-10 py-3 px-4" value="{{ search }}"> 
-
-    </input>
-    <button type="submit" class="bg-blue-500 text-xl hover:bg-blue-700 text-white py-2 px-3">සෙවීම</button>
-
-  </form>
+                              </div>
 
 
-  </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                              <button class="btn  collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                ජීවදත්ත
+                              </button>
+                            </h5>
+                          </div>
+                          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+                              {{ about_artist.biography_si }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
+                </div>
 
-  <!-- Selection -->
-  <div class="container">
-    <div class="grid gap-8 grid-cols-1 mt-5 ">
+                  <!-- END RESULT -->
+                </div>
 
-      {% for artist in data %}
-
-      <div class=" w-full lg:max-w-full lg:flex">
-        <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" >
-        </div>
-        <div class="border-r border-b border-l border-gray-400 lg:border-l lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-          <div class="mb-8">
-            <div class="text-gray-900 font-bold text-xl mb-2">ප්‍රසිද්ධ නාමය : {{ artist.known_as_si }}</div>
-            <div class="text-gray-900 font-bold text-xl mb-2">ඇත්ත නම : {{ artist.real_name_si }}</div>
-
-            {% if artist.birth_si %}
-            <div class="text-gray-900 font-bold text-xl mb-2">උපන්දිනය : {{ artist.birth_si  }}</div>
-            {% endif %}
-
-            {% if artist.death_si %}
-            <div class="text-gray-900 font-bold text-xl mb-2">විපත : {{ artist.death_si }}</div>
-            {% endif %}
-
+              </div>
+            </div>
+            
           </div>
-
+          <!-- END SEARCH RESULT -->
         </div>
-      </div>
+        </div>
 
 
-      {% endfor %}
-
-    </div>
-  </div>
 
   <script>
 
@@ -143,8 +306,13 @@
         });
     }
 
+
+
     $source.addEventListener('input', typeHandler) // register for oninput
     $source.addEventListener('propertychange', typeHandler) // for IE8
+
+
+
 
   </script>
 

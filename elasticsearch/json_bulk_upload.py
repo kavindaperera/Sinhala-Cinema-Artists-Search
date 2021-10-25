@@ -170,7 +170,7 @@ mapping = {
 
 
 def json_bulk_upload():
-    with open('../artists-corpus/sinhala_artists_data.json') as f:
+    with open('../artists-corpus/clean_sinhala_artists_data.json') as f:
         data = json.loads(f.read())
 
     # stopwords

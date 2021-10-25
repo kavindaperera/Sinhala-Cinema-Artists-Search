@@ -1,158 +1,183 @@
 {
-	"settings": {
-		"index": {
-			"number_of_shards": 1,
-			"number_of_replicas": 1
-		},
-		"analysis": {
-			"analyzer": {
-				"sinhala_ngram_analyzer": {
-					"type": "custom",
-					"tokenizer": "icu_tokenizer",
-					"filter": ["ngram_filter"]
+	"index-artists" : {
+	  "mappings" : {
+		"properties" : {
+		  "biography_en" : {
+			"type" : "text"
+		  },
+		  "biography_si" : {
+			"type" : "text",
+			"analyzer" : "sinhala_analyzer_sw"
+		  },
+		  "birth_en" : {
+			"type" : "text"
+		  },
+		  "birth_si" : {
+			"type" : "text"
+		  },
+		  "death_en" : {
+			"type" : "text"
+		  },
+		  "death_si" : {
+			"type" : "text"
+		  },
+		  "filmography_en" : {
+			"properties" : {
+			  "film_name_en" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
 				},
-				"sinhala_analyzer_sw": {
-					"type": "custom",
-					"tokenizer": "icu_tokenizer",
-					"filter": ["sinhala_stop"]
+				"analyzer" : "english_ngram_analyzer_2"
+			  },
+			  "role_name_en" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
 				},
-				"english_ngram_analyzer": {
-					"type": "custom",
-					"tokenizer": "classic",
-					"filter": ["ngram_filter"]
-				}
-			},
-			"filter": {
-				"ngram_filter": {
-					"type": "edge_ngram",
-					"min_gram": 2,
-					"max_gram": 20,
-					"side": "front"
-				},
-				"sinhala_stop": {
-					"type": "stop",
-					"stopwords": []
-				}
+				"analyzer" : "english_ngram_analyzer"
+			  }
 			}
-		}
-	},
-	"mappings": {
-		"properties": {
-			"biography_en": {
-				"type": "text"
-			},
-			"biography_si": {
-				"type": "text",
-				"analyzer": "sinhala_analyzer_sw"
-			},
-			"birth_en": {
-				"type": "text"
-			},
-			"birth_si": {
-				"type": "text"
-			},
-			"death_en": {
-				"type": "text"
-			},
-			"death_si": {
-				"type": "text"
-			},
-			"filmography_en": {
-				"properties": {
-					"film_name_en": {
-						"type": "text",
-						"analyzer": "english_ngram_analyzer"
-					},
-					"role_name_en": {
-						"type": "text",
-						"analyzer": "english_ngram_analyzer"
-					}
-				}
-			},
-			"filmography_si": {
-				"properties": {
-					"film_name_si": {
-						"type": "text",
-						"analyzer": "sinhala_ngram_analyzer"
-					},
-					"role_name_si": {
-						"type": "text",
-						"analyzer": "sinhala_ngram_analyzer"
-					}
-				}
-			},
-			"known_as_en": {
-				"type": "text",
-				"analyzer": "english_ngram_analyzer",
-				"fields": {
-					"keyword": {
-						"type": "keyword",
-						"ignore_above": 256
-					}
-				}
-			},
-			"known_as_si": {
-				"type": "text",
-				"analyzer": "sinhala_ngram_analyzer",
-				"fields": {
-					"keyword": {
-						"type": "keyword",
-						"ignore_above": 256
-					}
-				}
-			},
-			"national_awards_en": {
-				"properties": {
-					"award_ceremony_name_en": {
-						"type": "text",
-						"analyzer": "english_ngram_analyzer"
-					},
-					"award_name_en": {
-						"type": "text",
-						"analyzer": "english_ngram_analyzer"
-					},
-					"film_name_en": {
-						"type": "text",
-						"analyzer": "english_ngram_analyzer"
-					}
-				}
-			},
-			"national_awards_si": {
-				"properties": {
-					"award_ceremony_name_si": {
-						"type": "text",
-						"analyzer": "sinhala_ngram_analyzer"
-					},
-					"award_name_si": {
-						"type": "text",
-						"analyzer": "sinhala_ngram_analyzer"
-					},
-					"film_name_si": {
-						"type": "text",
-						"analyzer": "sinhala_ngram_analyzer"
-					}
-				}
-			},
-			"real_name_en": {
-				"type": "text",
-				"analyzer": "english_ngram_analyzer",
-				"fields": {
-					"keyword": {
-						"type": "keyword",
-						"ignore_above": 256
-					}
-				}
-			},
-			"real_name_si": {
-				"type": "text",
-				"analyzer": "sinhala_ngram_analyzer",
-				"fields": {
-					"keyword": {
-						"type": "keyword",
-						"ignore_above": 256
-					}
-				}
+		  },
+		  "filmography_si" : {
+			"properties" : {
+			  "film_name_si" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "sinhala_ngram_analyzer_2"
+			  },
+			  "role_name_si" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "sinhala_ngram_analyzer"
+			  }
 			}
+		  },
+		  "known_as_en" : {
+			"type" : "text",
+			"fields" : {
+			  "keyword" : {
+				"type" : "keyword",
+				"ignore_above" : 256
+			  }
+			},
+			"analyzer" : "english_ngram_analyzer"
+		  },
+		  "known_as_si" : {
+			"type" : "text",
+			"fields" : {
+			  "keyword" : {
+				"type" : "keyword",
+				"ignore_above" : 256
+			  }
+			},
+			"analyzer" : "sinhala_ngram_analyzer"
+		  },
+		  "national_awards_en" : {
+			"properties" : {
+			  "award_ceremony_name_en" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "english_ngram_analyzer_2"
+			  },
+			  "award_name_en" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "english_ngram_analyzer_2"
+			  },
+			  "film_name_en" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "english_ngram_analyzer_2"
+			  }
+			}
+		  },
+		  "national_awards_si" : {
+			"properties" : {
+			  "award_ceremony_name_si" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "sinhala_ngram_analyzer_2"
+			  },
+			  "award_name_si" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "sinhala_ngram_analyzer_2"
+			  },
+			  "film_name_si" : {
+				"type" : "text",
+				"fields" : {
+				  "keyword" : {
+					"type" : "keyword",
+					"ignore_above" : 256
+				  }
+				},
+				"analyzer" : "sinhala_ngram_analyzer_2"
+			  }
+			}
+		  },
+		  "real_name_en" : {
+			"type" : "text",
+			"fields" : {
+			  "keyword" : {
+				"type" : "keyword",
+				"ignore_above" : 256
+			  }
+			},
+			"analyzer" : "english_ngram_analyzer"
+		  },
+		  "real_name_si" : {
+			"type" : "text",
+			"fields" : {
+			  "keyword" : {
+				"type" : "keyword",
+				"ignore_above" : 256
+			  }
+			},
+			"analyzer" : "sinhala_ngram_analyzer"
+		  }
 		}
+	  }
 	}
-}
+  }

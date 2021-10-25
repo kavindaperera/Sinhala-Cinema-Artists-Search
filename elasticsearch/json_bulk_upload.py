@@ -18,6 +18,13 @@ mapping = {
                         "ngram_filter"
                     ]
                 },
+                "sinhala_ngram_analyzer_2": {
+                    "type": "custom",
+                    "tokenizer": "icu_tokenizer",
+                    "filter": [
+                        "ngram_filter_2"
+                    ]
+                },
                 "sinhala_analyzer_sw": {
                     "type": "custom",
                     "tokenizer": "icu_tokenizer",
@@ -31,12 +38,25 @@ mapping = {
                     "filter": [
                         "ngram_filter"
                     ]
+                },
+                "english_ngram_analyzer_2": {
+                    "type": "custom",
+                    "tokenizer": "classic",
+                    "filter": [
+                        "ngram_filter_2"
+                    ]
                 }
             },
             "filter": {
                 "ngram_filter": {
                     "type": "edge_ngram",
                     "min_gram": 2,
+                    "max_gram": 20,
+                    "side": "front"
+                },
+                "ngram_filter_2": {
+                    "type": "edge_ngram",
+                    "min_gram": 4,
                     "max_gram": 20,
                     "side": "front"
                 },
@@ -72,11 +92,23 @@ mapping = {
                 "properties": {
                     "film_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer"
+                        "analyzer": "english_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "role_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer"
+                        "analyzer": "english_ngram_analyzer",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     }
                 }
             },
@@ -84,11 +116,23 @@ mapping = {
                 "properties": {
                     "film_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer"
+                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "role_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer"
+                        "analyzer": "sinhala_ngram_analyzer",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     }
                 }
             },
@@ -116,15 +160,33 @@ mapping = {
                 "properties": {
                     "award_ceremony_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer"
+                        "analyzer": "english_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "award_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer"
+                        "analyzer": "english_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "film_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer"
+                        "analyzer": "english_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     }
                 }
             },
@@ -132,15 +194,33 @@ mapping = {
                 "properties": {
                     "award_ceremony_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer"
+                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "award_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer"
+                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "film_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer"
+                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     }
                 }
             },
@@ -174,7 +254,7 @@ def json_bulk_upload():
         data = json.loads(f.read())
 
     # stopwords
-    sw_temp = open("stop_words.txt",'r', encoding="utf8").read().split('\n')
+    sw_temp = open("stop_words.txt", 'r', encoding="utf8").read().split('\n')
     mapping["settings"]["analysis"]["filter"]["sinhala_stop"]["stopwords"] = sw_temp
 
     res1 = es.indices.create(index='index-artists', body=mapping)

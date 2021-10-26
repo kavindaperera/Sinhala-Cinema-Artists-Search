@@ -51,7 +51,10 @@ class QueryProcessor:
                 if (splits['affix'] == "ේ") and (token not in film_identifiers):
                     must_list.append({
                         "match": {
-                            "filmography_si.film_name_si": token
+                            "filmography_si.film_name_si": {
+                                "query": token,
+                                "analyzer": "sinhala_ngram_analyzer_2"
+                            }
                         }
                     })
 
@@ -60,7 +63,10 @@ class QueryProcessor:
                 if idx >= 0 and (token not in acted_identifiers):
                     must_list.append({
                         "match": {
-                            "filmography_si.film_name_si": ' '.join(tokens[:idx+1])
+                            "filmography_si.film_name_si": {
+                                "query": ' '.join(tokens[:idx+1]),
+                                "analyzer": "sinhala_ngram_analyzer_2"
+                            }
                         }
                     })
 

@@ -80,7 +80,7 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
     - Standard tokenizer is used during some of the query tokenizing.  
 2. Stopwords Filter
   - Sinhala Stop words filter 
-    - Elastic search only supports english stopwords filter. A custom sinhala stop was filter is created for sinhala language. This filter was on `biography` field. 
+    - Elastic search only supports english stopwords filter. A custom sinhala stop was filter is created for sinhala language. This filter was used on `biography` field. 
 
 3. Edge n-gram tokenizer
   - This filter helps to identify spelling mistakes and to do wildcard queries on sinhala text. Further explained the `Advanced Features` section.
@@ -212,7 +212,7 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
   - For example, `අයිරාගනී` or `අයිරාගනී රණසිංහ` will return correct results for `අයිරාංගනී සේරසිංහ` and `මහින්දාගම චිත්‍රපටයේ නළුවන්` will return same results as in `මහින්දාගමනය චිත්‍රපටයේ නළුවන්`.
 
 3.	Faceting and Rule based query classification
-  - Simple rule based classificationa are done before passing the request to elastic search. Few intents were first identified and queries are classified acoriding to them. For this, queries are first tokenized using a sinhala language tokenizer `siling`. This feature enables the search engine to support queries like:
+  - Simple rule based classifications are done before passing the request to elastic search. Few intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `siling`. This feature enables the search engine to support queries like:
   ```
   මහින්දාගමනය චිත්‍රපටයේ නළුවන්
   මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්
@@ -249,14 +249,14 @@ $ pip install -r requirements.txt
 
 ### Elasticsearch
 You need to first setup elasticsearch locally. Once elasticsearch is ready, start elastic search on port `localhost:9200`
-Do the following steps to index `index-artists` on your local elasticsearch cluster
+Then do the following steps to index `index-artists` on your local elasticsearch cluster
 
 ```
 cd elasticsearch
 python json_bulk_upload.py
 ```
 
-You can check whether the indexing was successful by sending a `GET` reqeust to `http://localhost:9200/index-artists/` , which will return in the index mapping.
+You can check whether the indexing was successful by sending a `GET` reqeust to `localhost:9200/index-artists/` , which will return in the index mapping.
 
 ### Start Flask Application
 Once the elasticsearch is up and running, do the following steps to start the `flask` application.
@@ -265,6 +265,7 @@ Once the elasticsearch is up and running, do the following steps to start the `f
 cd flask-server
 python app.py
 ```
+Now you can open the browser and search engine will run on `127.0.0.1:5000/`.
 
 ## Repository Structure
 

@@ -88,6 +88,115 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
   - For example the name  `රුක්මනී දේවි` produce the terms `["රු", "රුක", "රුක්", "රුක්ම", "රුක්මන", "රුක්මනී", "දේ", "දේව", "දේවි"]`.
 
 * [mapping.json](/elasticsearch/mapping.json) file shows how each of these techniques where used on different fields in elasticsearch.
+* Following `json` shows how different `analyzers` and `filters` were created using above mentioned techniques:
+
+<details>
+  <summary>Click to View!</summary>
+  
+  ```javascript
+{
+  "index-artists": {
+    "settings": {
+      "index": {
+        "routing": {
+          "allocation": {
+            "include": {
+              "_tier_preference": "data_content"
+            }
+          }
+        },
+        "number_of_shards": "1",
+        "provided_name": "index-artists",
+        "creation_date": "1635233423927",
+        "analysis": {
+          "filter": {
+            "ngram_filter_2": {
+              "min_gram": "4",
+              "side": "front",
+              "type": "edge_ngram",
+              "max_gram": "20"
+            },
+            "ngram_filter_1": {
+              "min_gram": "1",
+              "side": "front",
+              "type": "edge_ngram",
+              "max_gram": "20"
+            },
+            "sinhala_stop": {
+              "type": "stop",
+              "stopwords": [stop_words.txt]
+            },
+            "ngram_filter": {
+              "min_gram": "2",
+              "side": "front",
+              "type": "edge_ngram",
+              "max_gram": "20"
+            }
+          },
+          "analyzer": {
+            "english_ngram_analyzer": {
+              "filter": [
+                "ngram_filter"
+              ],
+              "type": "custom",
+              "tokenizer": "classic"
+            },
+            "sinhala_ngram_analyzer_1": {
+              "filter": [
+                "ngram_filter_1"
+              ],
+              "type": "custom",
+              "tokenizer": "icu_tokenizer"
+            },
+            "sinhala_ngram_analyzer_2": {
+              "filter": [
+                "ngram_filter_2"
+              ],
+              "type": "custom",
+              "tokenizer": "icu_tokenizer"
+            },
+            "english_ngram_analyzer_2": {
+              "filter": [
+                "ngram_filter_2"
+              ],
+              "type": "custom",
+              "tokenizer": "classic"
+            },
+            "sinhala_analyzer_sw": {
+              "filter": [
+                "sinhala_stop"
+              ],
+              "type": "custom",
+              "tokenizer": "icu_tokenizer"
+            },
+            "english_ngram_analyzer_1": {
+              "filter": [
+                "ngram_filter_1"
+              ],
+              "type": "custom",
+              "tokenizer": "classic"
+            },
+            "sinhala_ngram_analyzer": {
+              "filter": [
+                "ngram_filter"
+              ],
+              "type": "custom",
+              "tokenizer": "icu_tokenizer"
+            }
+          }
+        },
+        "number_of_replicas": "1",
+        "uuid": "5J2kRxWLTT-8nOmDywHE0A",
+        "version": {
+          "created": "7150199"
+        }
+      }
+    }
+  }
+}
+  ```
+</details>
+
 
 
 

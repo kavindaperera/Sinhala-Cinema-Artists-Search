@@ -21,7 +21,7 @@
       <ul>
         <li><a href="#no-of-records">No of Records</a></li>
         <li><a href="#data-fields">Data Fields</a></li>
-        <li><a href="#data-scraping">Data Scraping</a></li>
+        <li><a href="#data-scraping-and-cleaning">Data Scraping and Cleaning</a></li>
       </ul>
     </li>
     <li><a href="#techniques-used-in-designing-indexing-and-querying">Techniques Used in Designing Indexing and Querying</a></li>

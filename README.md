@@ -33,6 +33,8 @@
 
 ## About The Project
 
+The main objective of the project is to develop a search engine for well-known Sinhala cinema actors and actresses. Search engine supports Sinhala language. Users can search using different types of Sinhala Language queries. Elasticsearch is used for designing indexing and querying and flask is used as the back-end. 
+
 ## About Data
 
 ### No of Records
@@ -82,195 +84,11 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
 
 3. Edge n-gram tokenizer
   - This filter helps to identify spelling mistakes and to do wildcard queries on sinhala text. Further explained the `Advanced Features` section.
-  - This n-gram filter is used on all the fields except `biography`, `birth` and `death`. Different configuration were used accoriding to the nature of the field. 
-  - For example the name  `රුක්මනී දේවි` produce the terms `["රු", "රුක", "රුක්", "රුක්ම", "රුක්මන", "රුක්මනී", "දේ", "දේව", "දේවි"] `.
+  - This n-gram filter is used on all the fields except `biography`, `birth` and `death`. Different configuration were used according to the nature of the field. 
+  - For example the name  `රුක්මනී දේවි` produce the terms `["රු", "රුක", "රුක්", "රුක්ම", "රුක්මන", "රුක්මනී", "දේ", "දේව", "දේවි"]`.
 
-Following Elasticsearch mapping shows how each of these techniques where used on different fields:
-```
-{
-  "index-artists" : {
-    "mappings" : {
-      "properties" : {
-        "biography_en" : {
-          "type" : "text"
-        },
-        "biography_si" : {
-          "type" : "text",
-          "analyzer" : "sinhala_analyzer_sw"
-        },
-        "birth_en" : {
-          "type" : "text"
-        },
-        "birth_si" : {
-          "type" : "text"
-        },
-        "death_en" : {
-          "type" : "text"
-        },
-        "death_si" : {
-          "type" : "text"
-        },
-        "filmography_en" : {
-          "properties" : {
-            "film_name_en" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "english_ngram_analyzer"
-            },
-            "role_name_en" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "english_ngram_analyzer"
-            }
-          }
-        },
-        "filmography_si" : {
-          "properties" : {
-            "film_name_si" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "sinhala_ngram_analyzer"
-            },
-            "role_name_si" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "sinhala_ngram_analyzer"
-            }
-          }
-        },
-        "known_as_en" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          },
-          "analyzer" : "english_ngram_analyzer"
-        },
-        "known_as_si" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          },
-          "analyzer" : "sinhala_ngram_analyzer"
-        },
-        "national_awards_en" : {
-          "properties" : {
-            "award_ceremony_name_en" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "english_ngram_analyzer_2"
-            },
-            "award_name_en" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "english_ngram_analyzer"
-            },
-            "film_name_en" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "english_ngram_analyzer"
-            }
-          }
-        },
-        "national_awards_si" : {
-          "properties" : {
-            "award_ceremony_name_si" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "sinhala_ngram_analyzer_2"
-            },
-            "award_name_si" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "sinhala_ngram_analyzer"
-            },
-            "film_name_si" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
-              },
-              "analyzer" : "sinhala_ngram_analyzer"
-            }
-          }
-        },
-        "real_name_en" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          },
-          "analyzer" : "english_ngram_analyzer"
-        },
-        "real_name_si" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          },
-          "analyzer" : "sinhala_ngram_analyzer"
-        }
-      }
-    }
-  }
-}
-```
+* [mapping.json](/elasticsearch/mapping.json) file shows how each of these techniques where used on different fields in elasticsearch.
+
 
 
 ## Advanced Features
@@ -280,7 +98,11 @@ Following Elasticsearch mapping shows how each of these techniques where used on
 
 ![Autocomplete Suggestions](/images/autocomplete.jpg?raw=true "Autocomplete Suggestions")
 
-2.	Faceting and Rule based query classification
+2. Search will work for misspelled words
+  - With the help of Edge N-gram Tokenizer, the queries will tolerate typos. 
+  - For example, `අයිරාගනී` or `අයිරාගනී රණසිංහ` will return correct results for `අයිරාංගනී සේරසිංහ` and `මහින්දාගම චිත්‍රපටයේ නළුවන්` will return same results as in `මහින්දාගමනය චිත්‍රපටයේ නළුවන්`.
+
+3.	Faceting and Rule based query classification
   - Simple rule based classificationa are done before passing the request to elastic search. Few intents were first identified and queries are classified acoriding to them. For this, queries are first tokenized using a sinhala language tokenizer `siling`. This feature enables the search engine to support queries like:
   ```
   මහින්දාගමනය චිත්‍රපටයේ නළුවන්
@@ -298,8 +120,9 @@ Following Elasticsearch mapping shows how each of these techniques where used on
   සරසවිය සම්මාන ජයග්‍රහණය කල නිළියන්
   14 වන සරසවිය සම්මානය දිනූ නළුවා
   ```
-  - `bool` query feature of elastic search was also used for this purpose. The query terms will be classified as `must` and `should` which will help to rank the results. For example a query with term `නළුවන්` will return all the actors followed by actresses. similarly, a query with term `නිළියන්` will return all the actresses followed by actors. 
-
+  - `bool` query feature of elastic search is also used for this purpose. The query tokens will be classified as `must` and `should` which will help to rank the results. 
+    - For example a query with term `නළුවන්` should return all the actors followed by actresses. similarly, a query with term `නිළියන්` should return all the actresses followed by actors. Including the term `නළුවා` or `නිළිය` on `should` will rank the results accordingly. 
+    - A query like `මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්` or `කඩවුණු පොරොන්දුව චිත්‍රපටයේ නළුවන්` will classify the query tokens and include `මහින්දාගමනය` or `කඩවුණු පොරොන්දුව` as a `must` in `film_name` field and `නළුවා` or `නිළිය` as `should` in `role_name` field. This will return all the actors followed by actresses or actresses followed by actors who were in the cast of those films.
 
 
 ## Getting Started

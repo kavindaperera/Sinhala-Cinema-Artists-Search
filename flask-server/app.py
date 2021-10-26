@@ -7,7 +7,7 @@ import json
 from sinling import SinhalaTokenizer, word_splitter
 
 NODE_NAME = "index-artists"
-TITLE = "සිංහල කලාකරුවන්"
+TITLE = "සිංහල සිනමාවේ කලාකරුවන්"
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
@@ -17,13 +17,15 @@ tokenizer = SinhalaTokenizer()
 
 acted_identifiers = ["රගපැ", "රගපාපු", "රඟපැ", "රඟපාපු"]
 role_identifers = ["නළුවන්", "නිළියන්", "කලාකරුවන්"]
-actor_identifers = ["නළුවන්", "නළුවා","නළුව"]
+actor_identifers = ["නළුවන්", "නළුවා", "නළුව"]
 actress_identifers = ["නිළියන්", "නිළිය", "නිලිය"]
 film_identifiers = ["චිත්‍රපටයේ", "චිත්‍රපටය"]
 award_identifiers = ["සම්මානය", "සම්මාන"]
 award_ceremony_identifiers = ["සම්මාන", "සම්මානය", "උලෙල", "උළෙල"]
-won_identifiers = ["දිනූ", "ජයග්‍රහනය", "ජයග්‍රහණය", "ජයග්‍රහණය කල"]
+won_identifiers = ["දිනූ", "ජයග්‍රහනය",
+                   "ජයග්‍රහණය", "ජයග්‍රහණය කල", "ජයග්‍රහණය කරපු"]
 stop_words = open("stop_words.txt", 'r', encoding="utf8").read().split('\n')
+
 
 class QueryProcessor:
 
@@ -43,10 +45,10 @@ class QueryProcessor:
         should_list = []
 
         for token in tokens:
-            if(len(token)>1):
+            if(len(token) > 1):
                 splits = word_splitter.split(token)
 
-                if (splits['affix'] == "යේ") and (token not in film_identifiers):
+                if (splits['affix'] == "ේ") and (token not in film_identifiers):
                     must_list.append({
                         "match": {
                             "filmography_si.film_name_si": token
@@ -72,14 +74,14 @@ class QueryProcessor:
                     })
 
             if(token in actor_identifers):
-                must_list.append({
+                should_list.append({
                     "match": {
                         "filmography_si.role_name_si": "නළුවා"
                     }
                 })
 
             if(token in actress_identifers):
-                must_list.append({
+                should_list.append({
                     "match": {
                         "filmography_si.role_name_si": "නිළිය"
                     }
@@ -145,7 +147,7 @@ def autocomplete():
 
     res = es.search(index=NODE_NAME,
                     body={
-                        "size": 100,
+                        "size": 10,
                         "query": {
                             "wildcard": {
                                 "known_as_si.keyword": {
@@ -173,7 +175,7 @@ def search():
     print("must_list: ", must_list)
     print("should_list: ", should_list)
 
-    if len(must_list) > 0:
+    if len(must_list) > 0 or len(should_list) > 0:
         try:
             artists_data = es.search(index=NODE_NAME,
                                      body={
@@ -210,6 +212,7 @@ def search():
                                                             "national_awards_si.award_ceremony_name_si",
                                                             "national_awards_si.award_name_si",
                                                             "national_awards_si.film_name_si"],
+                                                 "analyzer": "standard",
                                                  "zero_terms_query": "all"
                                              }
                                          }

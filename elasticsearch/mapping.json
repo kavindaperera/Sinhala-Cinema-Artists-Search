@@ -109,7 +109,7 @@
 					"ignore_above" : 256
 				  }
 				},
-				"analyzer" : "english_ngram_analyzer_2"
+				"analyzer" : "english_ngram_analyzer"
 			  },
 			  "film_name_en" : {
 				"type" : "text",
@@ -143,7 +143,7 @@
 					"ignore_above" : 256
 				  }
 				},
-				"analyzer" : "sinhala_ngram_analyzer_2"
+				"analyzer" : "sinhala_ngram_analyzer"
 			  },
 			  "film_name_si" : {
 				"type" : "text",
@@ -181,3 +181,4 @@
 	  }
 	}
   }
+  

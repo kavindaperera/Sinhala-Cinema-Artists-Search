@@ -18,6 +18,13 @@ mapping = {
                         "ngram_filter"
                     ]
                 },
+                "sinhala_ngram_analyzer_1": {
+                    "type": "custom",
+                    "tokenizer": "icu_tokenizer",
+                    "filter": [
+                        "ngram_filter_1"
+                    ]
+                },
                 "sinhala_ngram_analyzer_2": {
                     "type": "custom",
                     "tokenizer": "icu_tokenizer",
@@ -25,6 +32,7 @@ mapping = {
                         "ngram_filter_2"
                     ]
                 },
+
                 "sinhala_analyzer_sw": {
                     "type": "custom",
                     "tokenizer": "icu_tokenizer",
@@ -39,6 +47,13 @@ mapping = {
                         "ngram_filter"
                     ]
                 },
+                "english_ngram_analyzer_1": {
+                    "type": "custom",
+                    "tokenizer": "classic",
+                    "filter": [
+                        "ngram_filter_1"
+                    ]
+                },
                 "english_ngram_analyzer_2": {
                     "type": "custom",
                     "tokenizer": "classic",
@@ -51,6 +66,12 @@ mapping = {
                 "ngram_filter": {
                     "type": "edge_ngram",
                     "min_gram": 2,
+                    "max_gram": 20,
+                    "side": "front"
+                },
+                "ngram_filter_1": {
+                    "type": "edge_ngram",
+                    "min_gram": 1,
                     "max_gram": 20,
                     "side": "front"
                 },
@@ -92,7 +113,7 @@ mapping = {
                 "properties": {
                     "film_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer_2",
+                        "analyzer": "english_ngram_analyzer",
                         "fields": {
                             "keyword": {
                                 "type": "keyword",
@@ -116,7 +137,7 @@ mapping = {
                 "properties": {
                     "film_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "analyzer": "sinhala_ngram_analyzer",
                         "fields": {
                             "keyword": {
                                 "type": "keyword",
@@ -170,7 +191,7 @@ mapping = {
                     },
                     "award_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer_2",
+                        "analyzer": "english_ngram_analyzer",
                         "fields": {
                             "keyword": {
                                 "type": "keyword",
@@ -180,7 +201,7 @@ mapping = {
                     },
                     "film_name_en": {
                         "type": "text",
-                        "analyzer": "english_ngram_analyzer_2",
+                        "analyzer": "english_ngram_analyzer",
                         "fields": {
                             "keyword": {
                                 "type": "keyword",
@@ -204,7 +225,7 @@ mapping = {
                     },
                     "award_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "analyzer": "sinhala_ngram_analyzer",
                         "fields": {
                             "keyword": {
                                 "type": "keyword",
@@ -214,7 +235,7 @@ mapping = {
                     },
                     "film_name_si": {
                         "type": "text",
-                        "analyzer": "sinhala_ngram_analyzer_2",
+                        "analyzer": "sinhala_ngram_analyzer",
                         "fields": {
                             "keyword": {
                                 "type": "keyword",

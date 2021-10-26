@@ -39,17 +39,27 @@ class QueryProcessor:
         return must_list, should_list
 
     @classmethod
+    def getAnalyzer(self,tokens):
+        stortest_string = min(tokens, key=len)
+        if(len(stortest_string)<3):
+            return "sinhala_ngram_analyzer"
+        else:
+            return "sinhala_ngram_analyzer_2"   
+
+
+    @classmethod
     def classifyIntent(self, tokens, query):
 
         must_list = []
         should_list = []
 
         for token in tokens:
-            if(len(token) > 1):
+            if(len(token) > 2):
                 splits = word_splitter.split(token)
+                # print(splits)
 
                 if (splits['affix'] == "ේ") and (token not in film_identifiers):
-                    must_list.append({
+                    should_list.append({
                         "match": {
                             "filmography_si.film_name_si": {
                                 "query": token,
@@ -59,13 +69,14 @@ class QueryProcessor:
                     })
 
             if(token in acted_identifiers) or (token in film_identifiers):
+                # print(token)
                 idx = tokens.index(token) - 1
-                if idx >= 0 and (token not in acted_identifiers):
+                if idx >= 0:
                     must_list.append({
                         "match": {
                             "filmography_si.film_name_si": {
                                 "query": ' '.join(tokens[:idx+1]),
-                                "analyzer": "sinhala_ngram_analyzer_2"
+                                "analyzer": self.getAnalyzer(tokens)
                             }
                         }
                     })
@@ -213,6 +224,7 @@ def search():
                                              "multi_match": {
                                                  "query": "{}".format(q),
                                                  "fields": ["real_name_si", "known_as_si",
+                                                            "birth_si", "death_si",
                                                             "filmography_si.film_name_si",
                                                             "biography_si",
                                                             "national_awards_si.award_ceremony_name_si",

@@ -39,7 +39,7 @@ The main objective of the project is to develop a search engine for well-known S
 
 ### No of Records
 
-- The artist corpus contains data about more than 350 well-known actors and actresses. Data was extracted from [films.lk](films.lk)
+- The artist corpus contains data about more than 350 well-known actors and actresses. Data was extracted from [films.lk](https://www.films.lk). 
 
 ### Data Fields
 
@@ -60,7 +60,7 @@ Each artist contains following data fields in both Sinhala and English. `_si` an
 
 ### Data Scraping and Cleaning
 
-- All the data is scraped from [films.lk](films.lk). 
+- All the data is scraped from [films.lk](https://www.films.lk). 
 - [Beautiful Soup](https://pypi.org/project/beautifulsoup4/) which is Python library for pulling data out of HTML and XML files
 is used for scraping the website. 
 - First the required data is extracted in english language and was stored in `json` format. `scraper.ipynb` notebook contains this process. 

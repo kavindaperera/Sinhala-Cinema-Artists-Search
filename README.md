@@ -89,11 +89,10 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
   - This n-gram filter is used on all the fields except `biography`, `birth` and `death`. Different configuration were used according to the nature of the field. 
   - For example the name  `රුක්මනී දේවි` produce the terms `["රු", "රුක", "රුක්", "රුක්ම", "රුක්මන", "රුක්මනී", "දේ", "දේව", "දේවි"]`.
 
-* [mapping.json](/elasticsearch/mapping.json) file shows how each of these techniques where used on different fields in elasticsearch.
-* Following `json` shows how different `analyzers` and `filters` were created using above mentioned techniques:
+The [mapping.json](/elasticsearch/mapping.json) file shows how each of these techniques where used on different fields in elasticsearch. Following `json` shows how different `analyzers` and `filters` were created using above mentioned techniques:
 
 <details>
-  <summary>Click to View!</summary>
+  <summary>Click to Expand!</summary>
   
   ```javascript
 {

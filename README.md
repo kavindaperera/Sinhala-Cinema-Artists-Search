@@ -35,6 +35,8 @@
 
 The main objective of the project is to develop a search engine for well-known Sinhala cinema actors and actresses. Search engine supports Sinhala language. Users can search using different types of Sinhala Language queries. Elasticsearch is used for designing indexing and querying and flask is used as the back-end. 
 
+![ Main](/images/main.gif?raw=true "Main ")
+
 ## About Data
 
 ### No of Records

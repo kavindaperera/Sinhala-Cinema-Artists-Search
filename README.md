@@ -35,6 +35,8 @@
 
 The main objective of the project is to develop a search engine for well-known Sinhala cinema actors and actresses. Search engine supports Sinhala language. Users can search using different types of Sinhala Language queries. Elasticsearch is used for designing indexing and querying and flask is used as the back-end. 
 
+![ Main](/images/main.gif?raw=true "Main ")
+
 ## About Data
 
 ### No of Records
@@ -75,23 +77,24 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
 
 1. Tokenizing
   - ICU_tokenizer 
-    - This is the recommended tokenizer by elastic search for unicode.  ICU tokenizer is used on all sinhala language data fields when indexing.
+    - This Tokenizes text into words on word boundaries, as defined in [UAX #29: Unicode Text Segmentation](https://www.unicode.org/reports/tr29/). It behaves much like the `standard tokenizer`, but adds better support for some Asian language like Sinhala. This is used on all sinhala language text fields at index time.
   - Standard Tokenizer 
-    - Standard tokenizer is used during some of the query tokenizing.  
+    - The `standard tokenizer` provides grammar based tokenization.This tokenizer is also used during some of the query tokenizing. 
 2. Stopwords Filter
   - Sinhala Stop words filter 
-    - Elastic search only supports english stopwords filter. A custom sinhala stop was filter is created for sinhala language. This filter was used on `biography` field. 
+    - Elastic search does not support `sinhala` stop work filtering. A custom sinhala stop was filter is created for sinhala language. This filter was used on `biography_si` field.
+    - The list of stop words can be found in [stopwords.txt](/elasticsearch/stop_words.txt) 
 
-3. Edge n-gram tokenizer
-  - This filter helps to identify spelling mistakes and to do wildcard queries on sinhala text. Further explained the `Advanced Features` section.
+3. Edge n-gram token filter
+  - The `edge_ngram` filter is similar to a `n_gram` token flter. But, it ponly outputs n-grams that start at the begining of the token.
   - This n-gram filter is used on all the fields except `biography`, `birth` and `death`. Different configuration were used according to the nature of the field. 
   - For example the name  `රුක්මනී දේවි` produce the terms `["රු", "රුක", "රුක්", "රුක්ම", "රුක්මන", "රුක්මනී", "දේ", "දේව", "දේවි"]`.
+  - This filter helps to identify spelling mistakes and to do wildcard queries on sinhala text. Further explained the `Advanced Features` section.
 
-* [mapping.json](/elasticsearch/mapping.json) file shows how each of these techniques where used on different fields in elasticsearch.
-* Following `json` shows how different `analyzers` and `filters` were created using above mentioned techniques:
+The [mapping.json](/elasticsearch/mapping.json) file shows how each of these techniques where used on different fields in elasticsearch. Following `json` shows how different `analyzers` and `filters` were created using above mentioned techniques:
 
 <details>
-  <summary>Click to View!</summary>
+  <summary>Click to Expand!</summary>
   
   ```javascript
 {
@@ -212,7 +215,7 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
   - For example, `අයිරාගනී` or `අයිරාගනී රණසිංහ` will return correct results for `අයිරාංගනී සේරසිංහ` and `මහින්දාගම චිත්‍රපටයේ නළුවන්` will return same results as in `මහින්දාගමනය චිත්‍රපටයේ නළුවන්`.
 
 3.	Faceting and Rule based query classification
-  - Simple rule based classifications are done before passing the request to elastic search. Few intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `siling`. This feature enables the search engine to support queries like:
+  - Simple rule based classifications are done before passing the request to elasticsearch. Few intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `sinling`. This feature enables the search engine to support queries like:
   ```
   මහින්දාගමනය චිත්‍රපටයේ නළුවන්
   මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්
@@ -229,9 +232,9 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
   සරසවිය සම්මාන ජයග්‍රහණය කල නිළියන්
   14 වන සරසවිය සම්මානය දිනූ නළුවා
   ```
-  - `bool` query feature of elastic search is also used for this purpose. The query tokens will be classified as `must` and `should` which will help to rank the results. 
-    - For example a query with term `නළුවන්` should return all the actors followed by actresses. similarly, a query with term `නිළියන්` should return all the actresses followed by actors. Including the term `නළුවා` or `නිළිය` on `should` will rank the results accordingly. 
-    - A query like `මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්` or `කඩවුණු පොරොන්දුව චිත්‍රපටයේ නළුවන්` will classify the query tokens and include `මහින්දාගමනය` or `කඩවුණු පොරොන්දුව` as a `must` in `film_name` field and `නළුවා` or `නිළිය` as `should` in `role_name` field. This will return all the actors followed by actresses or actresses followed by actors who were in the cast of those films.
+  - `bool` query feature of elasticsearch is also used for this purpose. The query tokens will be classified as `must` and `should` which will help to rank the results. 
+    - For example a query with term `නළුවන්` should return all the actors followed by actresses. Similarly, a query with term `නිළියන්` should return all the actresses followed by actors. Including the term `නළුවා` or `නිළිය` on `should` will rank the results accordingly. 
+    - A query like `මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්` or `කඩවුණු පොරොන්දුව චිත්‍රපටයේ නළුවන්` will classify the query tokens and include `මහින්දාගමනය` or `කඩවුණු පොරොන්දුව` as a `must` in `film_name_si` field and `නළුවා` or `නිළිය` as `should` in `role_name_si` field. This will return all the actors followed by actresses or actresses followed by actors who were in the cast of those films.
 
 
 ## Getting Started
@@ -239,7 +242,7 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
 
 ###  Setup virtual environement
 
-Complete the following steps to create a virtual environment and install all the requirements.
+Complete the following steps to setup a virtual environment and install all the required libraries:
 
 ```
 $ python3 -m venv venv
@@ -248,8 +251,14 @@ $ pip install -r requirements.txt
 ```
 
 ### Elasticsearch
-You need to first setup elasticsearch locally. Once elasticsearch is ready, start elastic search on port `localhost:9200`
-Then do the following steps to index `index-artists` on your local elasticsearch cluster
+You need to first setup elasticsearch locally. Once elasticsearch is ready, start elasticsearch on port `localhost:9200`.
+Run the following command to setup `icu_tokenizer` plugin on your elsaticsearch cluster:
+
+```
+sudo bin/elasticsearch-plugin install analysis-icu
+```
+
+Then run the following commands to index `index-artists` on your local elasticsearch cluster:
 
 ```
 cd elasticsearch
@@ -259,7 +268,7 @@ python json_bulk_upload.py
 You can check whether the indexing was successful by sending a `GET` reqeust to `localhost:9200/index-artists/` , which will return in the index mapping.
 
 ### Start Flask Application
-Once the elasticsearch is up and running, do the following steps to start the `flask` application.
+Once the elasticsearch is up and running, run the following commands to start the `flask` application:
 
 ```
 cd flask-server

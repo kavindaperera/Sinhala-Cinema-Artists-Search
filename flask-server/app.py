@@ -39,13 +39,12 @@ class QueryProcessor:
         return must_list, should_list
 
     @classmethod
-    def getAnalyzer(self,tokens):
+    def getAnalyzer(self, tokens):
         stortest_string = min(tokens, key=len)
-        if(len(stortest_string)<3):
+        if(len(stortest_string) < 3):
             return "sinhala_ngram_analyzer"
         else:
-            return "sinhala_ngram_analyzer_2"   
-
+            return "sinhala_ngram_analyzer_2"
 
     @classmethod
     def classifyIntent(self, tokens, query):
@@ -223,6 +222,7 @@ def search():
                                          "query": {
                                              "multi_match": {
                                                  "query": "{}".format(q),
+                                                 "type": "most_fields",
                                                  "fields": ["real_name_si", "known_as_si",
                                                             "birth_si", "death_si",
                                                             "filmography_si.film_name_si",

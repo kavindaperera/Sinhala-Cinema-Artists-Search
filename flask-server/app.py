@@ -1,10 +1,9 @@
 import re
 from flask import Flask, render_template, request
-from flask_restful import Api, Resource
 from elasticsearch import Elasticsearch, helpers, ElasticsearchException
-import requests
-import json
 from sinling import SinhalaTokenizer, word_splitter
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 NODE_NAME = "index-artists"
 TITLE = "සිංහල සිනමාවේ කලාකරුවන්"
@@ -16,7 +15,7 @@ app = Flask(__name__)
 tokenizer = SinhalaTokenizer()
 
 acted_identifiers = ["රගපැ", "රගපාපු", "රඟපැ", "රඟපාපු"]
-role_identifers = ["නළුවන්", "නිළියන්", "කලාකරුවන්"]
+role_identifers = ["නළුවා", "නිළිය"]
 actor_identifers = ["නළුවන්", "නළුවා", "නළුව"]
 actress_identifers = ["නිළියන්", "නිළිය", "නිලිය"]
 film_identifiers = ["චිත්‍රපටයේ", "චිත්‍රපටය"]
@@ -34,76 +33,193 @@ class QueryProcessor:
 
         tokens = tokenizer.tokenize(query)
         must_list, should_list = self.classifyIntent(
-            tokens=tokens, query=query)
+            tokens=tokens)
 
         return must_list, should_list
 
     @classmethod
     def getAnalyzer(self, tokens):
-        stortest_string = min(tokens, key=len)
-        if(len(stortest_string) < 3):
+        shortest_string = min(tokens, key=len)
+        if(len(shortest_string) < 3):
             return "sinhala_ngram_analyzer"
         else:
             return "sinhala_ngram_analyzer_2"
 
     @classmethod
-    def classifyIntent(self, tokens, query):
+    def getSimilarity(self, corpus):
+        vectorizer = TfidfVectorizer(
+            analyzer="char", token_pattern=u'(?u)\\b\w+\\b')
+        X = vectorizer.fit_transform(corpus)
+        cs = cosine_similarity(X[0:1], X)
+        score_list = cs[0][1:]
+        return score_list
 
+    @classmethod
+    def classifyIntent(self, tokens):
+
+        intent_type = -1
         must_list = []
         should_list = []
 
         for token in tokens:
-            if(len(token) > 2):
-                splits = word_splitter.split(token)
-                # print(splits)
+            corpus = [token]
+            corpus.extend(acted_identifiers)
+            corpus.extend(film_identifiers)
+            max_score = max(self.getSimilarity(corpus))
 
-                if (splits['affix'] == "ේ") and (token not in film_identifiers):
+            if max_score > 0.8:
+                intent_type = 1  # movies
+
+        if intent_type == 1:
+            for token in tokens:
+                if(token in actor_identifers):
                     should_list.append({
                         "match": {
-                            "filmography_si.film_name_si": {
-                                "query": token,
-                                "analyzer": "sinhala_ngram_analyzer_2"
-                            }
+                            "filmography_si.role_name_si": "නළුවා"
                         }
                     })
 
-            if(token in acted_identifiers) or (token in film_identifiers):
-                # print(token)
-                idx = tokens.index(token) - 1
-                if idx >= 0:
-                    must_list.append({
+                if(token in actress_identifers):
+                    should_list.append({
                         "match": {
-                            "filmography_si.film_name_si": {
-                                "query": ' '.join(tokens[:idx+1]),
-                                "analyzer": self.getAnalyzer(tokens)
-                            }
+                            "filmography_si.role_name_si": "නිළිය"
                         }
                     })
 
-            if(token in won_identifiers) or (token in award_ceremony_identifiers):
-                idx = tokens.index(token) - 1
-                if idx >= 0 and (token not in won_identifiers):
-                    must_list.append({
+            query_words = [token for token in tokens if token not in acted_identifiers +
+                           film_identifiers+actress_identifers+actor_identifers]
+            query = ' '.join(query_words)
+
+            must_list.append({
+                "match": {
+                    "filmography_si.film_name_si": {
+                        "query": query,
+                        "analyzer": self.getAnalyzer(query_words)
+                    }
+                }
+            })
+
+            return must_list, should_list
+
+        for token in tokens:
+            corpus = [token]
+            corpus.extend(award_ceremony_identifiers)
+            corpus.extend(won_identifiers)
+            max_score = max(self.getSimilarity(corpus))
+
+            if max_score > 0.8:
+                intent_type = 2  # awards
+
+        if intent_type == 2:
+            for token in tokens:
+                if(token in actor_identifers):
+                    should_list.append({
                         "match": {
-                            "national_awards_si.award_ceremony_name_si": ' '.join(tokens[:idx+1])
+                            "filmography_si.role_name_si": "නළුවා"
                         }
                     })
 
-            if(token in actor_identifers):
-                should_list.append({
-                    "match": {
-                        "filmography_si.role_name_si": "නළුවා"
-                    }
-                })
+                if(token in actress_identifers):
+                    should_list.append({
+                        "match": {
+                            "filmography_si.role_name_si": "නිළිය"
+                        }
+                    })
 
-            if(token in actress_identifers):
-                should_list.append({
-                    "match": {
-                        "filmography_si.role_name_si": "නිළිය"
-                    }
-                })
+            query_words = [token for token in tokens if token not in award_ceremony_identifiers +
+                           won_identifiers+actress_identifers+actor_identifers]
+            query = ' '.join(query_words)
+
+            must_list.append({
+                "match": {
+                    "national_awards_si.award_ceremony_name_si": query
+                }
+            })
+
+            return must_list, should_list
+
+        for token in tokens:
+            corpus = [token]
+            corpus.extend(actor_identifers)
+            corpus.extend(actress_identifers)
+            max_score = max(self.getSimilarity(corpus))
+
+            if max_score > 0.8:
+                intent_type = 3  # gender only
+
+        if intent_type == 3:
+            for token in tokens:
+                if(token in actor_identifers):
+                    should_list.append({
+                        "match": {
+                            "filmography_si.role_name_si": "නළුවා"
+                        }
+                    })
+
+                if(token in actress_identifers):
+                    should_list.append({
+                        "match": {
+                            "filmography_si.role_name_si": "නිළිය"
+                        }
+                    })
+
+            query_words = [
+                token for token in tokens if token not in actress_identifers+actor_identifers]
+            query = ' '.join(query_words)
+
+            must_list.append({
+                "multi_match": {
+                    "query": query,
+                    "fields": ["real_name_si", "known_as_si",
+                               "birth_si", "death_si",
+                               "filmography_si.film_name_si",
+                               "biography_si",
+                               "national_awards_si.award_ceremony_name_si",
+                               "national_awards_si.award_name_si",
+                               "national_awards_si.film_name_si"],
+                    "analyzer": self.getAnalyzer(query_words),           
+                }
+            })
+
+            return must_list, should_list
 
         return must_list, should_list
+
+        # for token in tokens:
+        #     if(token in acted_identifiers) or (token in film_identifiers):
+        #         idx = tokens.index(token) - 1
+        #         if idx >= 0:
+        #             must_list.append({
+        #                 "match": {
+        #                     "filmography_si.film_name_si": {
+        #                         "query": ' '.join(tokens[:idx+1]),
+        #                         "analyzer": self.getAnalyzer(tokens)
+        #                     }
+        #                 }
+        #             })
+
+        #     if(token in won_identifiers) or (token in award_ceremony_identifiers):
+        #         idx = tokens.index(token) - 1
+        #         if idx >= 0 and (token not in won_identifiers):
+        #             must_list.append({
+        #                 "match": {
+        #                     "national_awards_si.award_ceremony_name_si": ' '.join(tokens[:idx+1])
+        #                 }
+        #             })
+
+        #     if(token in actor_identifers):
+        #         should_list.append({
+        #             "match": {
+        #                 "filmography_si.role_name_si": "නළුවා"
+        #             }
+        #         })
+
+        #     if(token in actress_identifers):
+        #         should_list.append({
+        #             "match": {
+        #                 "filmography_si.role_name_si": "නිළිය"
+        #             }
+        #         })
 
 
 @app.route("/")
@@ -230,7 +346,7 @@ def search():
                                                             "national_awards_si.award_ceremony_name_si",
                                                             "national_awards_si.award_name_si",
                                                             "national_awards_si.film_name_si"],
-                                                 "analyzer": "standard",
+                                                 "analyzer":"standard",   
                                                  "zero_terms_query": "all"
                                              }
                                          }

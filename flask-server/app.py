@@ -23,7 +23,8 @@ award_identifiers = ["සම්මානය", "සම්මාන"]
 award_ceremony_identifiers = ["සම්මාන", "සම්මානය", "උලෙල", "උළෙල"]
 won_identifiers = ["දිනූ", "ජයග්‍රහනය",
                    "ජයග්‍රහණය", "ජයග්‍රහණය කල", "ජයග්‍රහණය කරපු"]
-stop_words = open("stop_words.txt", 'r', encoding="utf8").read().split('\n')
+                   
+stop_word_list = open("stop_words.txt", 'r', encoding="utf8").read().split('\n')
 
 
 class QueryProcessor:

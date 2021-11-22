@@ -214,8 +214,8 @@ The [mapping.json](/elasticsearch/mapping.json) file shows how each of these tec
   - With the help of Edge N-gram Tokenizer, the queries will tolerate typos. 
   - For example, `අයිරාගනී` or `අයිරාගනී රණසිංහ` will return correct results for `අයිරාංගනී සේරසිංහ` and `මහින්දාගම චිත්‍රපටයේ නළුවන්` will return same results as in `මහින්දාගමනය චිත්‍රපටයේ නළුවන්`.
 
-3.	Faceting and Rule based query classification
-  - Simple rule based classifications are done before passing the request to elasticsearch. Few intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `sinling`. This feature enables the search engine to support queries like:
+3.	Faceting and Rule based query intent classification
+  - Query is passed to a intent classifier before passing the request to elasticsearch. # types of intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `sinling`. After that, TF-IDF vectorization and cosine similarity are used for classification. This  enables the search engine to support queries like:
   ```
   මහින්දාගමනය චිත්‍රපටයේ නළුවන්
   මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්
@@ -232,7 +232,7 @@ The [mapping.json](/elasticsearch/mapping.json) file shows how each of these tec
   සරසවිය සම්මාන ජයග්‍රහණය කල නිළියන්
   14 වන සරසවිය සම්මානය දිනූ නළුවා
   ```
-  - `bool` query feature of elasticsearch is also used for this purpose. The query tokens will be classified as `must` and `should` which will help to rank the results. 
+  - `bool` query feature of elasticsearch is also used for this purpose. The query tokens will be classified as `must` and `should` which will help to rank and filter the results. 
     - For example a query with term `නළුවන්` should return all the actors followed by actresses. Similarly, a query with term `නිළියන්` should return all the actresses followed by actors. Including the term `නළුවා` or `නිළිය` on `should` will rank the results accordingly. 
     - A query like `මහින්දාගමනය චිත්‍රපටයේ රඟපැ නළුවන්` or `කඩවුණු පොරොන්දුව චිත්‍රපටයේ නළුවන්` will classify the query tokens and include `මහින්දාගමනය` or `කඩවුණු පොරොන්දුව` as a `must` in `film_name_si` field and `නළුවා` or `නිළිය` as `should` in `role_name_si` field. This will return all the actors followed by actresses or actresses followed by actors who were in the cast of those films.
 

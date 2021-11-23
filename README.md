@@ -215,7 +215,7 @@ The [mapping.json](/elasticsearch/mapping.json) file shows how each of these tec
   - For example, `අයිරාගනී` or `අයිරාගනී රණසිංහ` will return correct results for `අයිරාංගනී සේරසිංහ` and `මහින්දාගම චිත්‍රපටයේ නළුවන්` will return same results as in `මහින්දාගමනය චිත්‍රපටයේ නළුවන්`.
 
 3.	Faceting and Rule based query intent classification
-  - Query is passed to a intent classifier before passing the request to elasticsearch. 3 types of intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `sinling`. After that, TF-IDF vectorization and cosine similarity are used for classification. This  enables the search engine to support queries like:
+  - Query is passed to a intent classifier before passing the request to elasticsearch. 3 types of intents were first identified and queries are classified according to them. For this, queries are first tokenized using a sinhala language tokenizer `sinling`. After that, TF-IDF vectorization and cosine similarity are used for classification. This  enables the search engine to support additional queries like:
   ```
   මහින්දාගමනය චිත්‍රපටය
   මහින්දාගමනය චිත්‍රපටයේ නළුවන්

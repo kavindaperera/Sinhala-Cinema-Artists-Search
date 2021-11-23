@@ -86,7 +86,7 @@ For indexing and querying the Elasticsearch is used. Some of the bult-in tokenzi
     - The list of stop words can be found in [stopwords.txt](/elasticsearch/stop_words.txt) 
 
 3. Edge n-gram token filter
-  - The `edge_ngram` filter is similar to a `n_gram` token flter. But, it ponly outputs n-grams that start at the begining of the token.
+  - The `edge_ngram` filter is similar to a `n_gram` token flter. But, it only outputs n-grams that start at the begining of the token.
   - This n-gram filter is used on all the fields except `biography`, `birth` and `death`. Different configuration were used according to the nature of the field. 
   - For example the name  `රුක්මනී දේවි` produce the terms `["රු", "රුක", "රුක්", "රුක්ම", "රුක්මන", "රුක්මනී", "දේ", "දේව", "දේවි"]`.
   - This filter helps to identify spelling mistakes and to do wildcard queries on sinhala text. Further explained the `Advanced Features` section.
